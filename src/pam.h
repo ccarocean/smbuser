@@ -28,7 +28,7 @@
  * @retval false The user has not been authenticated,
  *               errors can cause this result as well.
  */
-bool authenticate(const char *username);
+bool authenticate(const char *username, const char *password);
 
 
 #endif //SMBUSER_PAM_H

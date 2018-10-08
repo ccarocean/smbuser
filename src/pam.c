@@ -55,7 +55,14 @@ static int pam_conversation(
         switch (msg[i]->msg_style)
         {
             case PAM_PROMPT_ECHO_OFF:  // get password
-                responses[i].resp = strdup(getpass(msg[i]->msg));
+                if (appdata_ptr == NULL)
+                {
+                    responses[i].resp = strdup(getpass(msg[i]->msg));
+                }
+                else
+                {
+                    responses[i].resp = strdup(appdata_ptr);
+                }
                 if (responses[i].resp == NULL)
                 {
                     goto fail;
@@ -114,7 +121,7 @@ fail:
 }
 
 
-bool authenticate(const char *username)
+bool authenticate(const char *username, const char *password)
 {
     bool authenticated = false;
     pam_handle_t *pamh = NULL;
@@ -125,6 +132,7 @@ bool authenticate(const char *username)
             &pam_conversation,
             NULL
     };
+    conv.appdata_ptr = (void *)password;
     pam_error = pam_start("login", username, &conv, &pamh);
     if (pam_error != PAM_SUCCESS)
     {
