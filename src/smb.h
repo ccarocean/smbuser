@@ -31,4 +31,12 @@
 int smbuseradd(const char *username, const char *password);
 
 
+/** Delete SMB user.
+ *
+ * @param username Username of the user to remove from the SMB database.
+ * @return 0 on success, -1 on failure
+ */
+int smbuserdel(const char *username);
+
+
 #endif //SMBUSER_SMB_H

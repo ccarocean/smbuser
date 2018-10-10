@@ -27,7 +27,8 @@ target_link_libraries(smbuseradd pam)
 
 add_executable(smbuserdel
         src/smbuserdel.c
+        src/common.c
         src/pam.c
         src/smb.c
         )
-target_link_libraries(smbuseradd pam)
+target_link_libraries(smbuserdel pam)

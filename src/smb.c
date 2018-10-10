@@ -97,3 +97,45 @@ int smbuseradd(const char *username, const char *password)
 
     return 0;
 }
+
+
+int smbuserdel(const char *username)
+{
+    // prevent semicolon attack
+    if (!alnum_only(username))
+    {
+        return -1;
+    }
+
+    // call smbpasswd
+    pid_t pid;
+    if ((pid = fork()) == 0)
+    {
+        // throw away output, and prevent input on stdin
+        int devnull = open("/dev/null", O_RDWR);
+        dup2(devnull, 0);
+        dup2(devnull, 1);
+        dup2(devnull, 2);
+
+        // exec smbpasswd
+        if (execl(SMBPASSWD_PATH, SMBPASSWD_PATH, "-x", username, NULL))
+        {
+            perror("execl");
+            return -1;
+        }
+    }
+
+    // wait for smbpasswd to finish
+    int status;
+    if (waitpid(pid, &status, 0) == -1)
+    {
+        perror("waitpid");
+        return -1;
+    }
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+    {
+        return -1;
+    }
+
+    return 0;
+}
