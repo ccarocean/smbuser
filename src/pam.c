@@ -15,14 +15,13 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#include <security/pam_appl.h>
 
 #include <stdio.h>
-#include <stdbool.h>
-
 #include <stdlib.h>
 #include <string.h>
+
 #include <unistd.h>
+#include <security/pam_appl.h>
 
 #include "pam.h"
 
@@ -121,9 +120,9 @@ fail:
 }
 
 
-bool authenticate(const char *username, const char *password)
+int authenticate(const char *username, const char *password)
 {
-    bool authenticated = false;
+    int authenticated = false;
     pam_handle_t *pamh = NULL;
     int pam_error = 0;
 
@@ -136,18 +135,18 @@ bool authenticate(const char *username, const char *password)
     pam_error = pam_start("login", username, &conv, &pamh);
     if (pam_error != PAM_SUCCESS)
     {
-        return false;
+        return -1;
     }
 
     // authenticate user
     pam_error = pam_authenticate(pamh, 0);
-    authenticated = pam_error == PAM_SUCCESS;
+    authenticated = (pam_error == PAM_SUCCESS) ? 0 : -1;
 
     // close PAM conversation
     if (pam_end(pamh, pam_error) != PAM_SUCCESS)
     {
         pamh = NULL;
-        return false;
+        return -1;
     }
 
     // return result

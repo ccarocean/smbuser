@@ -15,7 +15,6 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#include <stdbool.h>
 
 #ifndef SMBUSER_PAM_H
 #define SMBUSER_PAM_H
@@ -24,11 +23,9 @@
 /** Authenticate a user with PAM.
  *
  * @param username The username to authenticate against.
- * @retval true The user has been authenticated.
- * @retval false The user has not been authenticated,
- *               errors can cause this result as well.
+ * @return 0 on success, -1 on failure
  */
-bool authenticate(const char *username, const char *password);
+int authenticate(const char *username, const char *password);
 
 
 #endif //SMBUSER_PAM_H
