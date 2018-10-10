@@ -122,7 +122,7 @@ fail:
 
 int authenticate(const char *username, const char *password)
 {
-    int authenticated = false;
+    int authenticated = -1;
     pam_handle_t *pamh = NULL;
     int pam_error = 0;
 
