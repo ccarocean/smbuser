@@ -17,7 +17,11 @@
 
 
 #include <ctype.h>
+#include <errno.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "common.h"
 
@@ -32,4 +36,17 @@ bool alnum_only(const char *string)
         }
     }
     return true;
+}
+
+
+int raise_to_effective(void)
+{
+    if (setuid(geteuid()) == -1)
+    {
+        perror("setuid");
+    }
+    if (setgid(getegid()) == -1)
+    {
+
+    }
 }

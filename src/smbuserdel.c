@@ -72,10 +72,17 @@ int main(int argc, char *argv[])
         goto final;
     }
 
+    // copy effective user and group id to real user and group id, otherwise
+    // smbpasswd will throw away permissions
+    if (raise_to_effective() != 0)
+    {
+        return -1;
+    }
+
     // remove smb user
     if (smbuserdel(username) != 0)
     {
-        fprintf(stderr, "Failed to delete user %s.", username);
+        fprintf(stderr, "Failed to delete user %s.\n", username);
         retval = UNKNOWN_ERROR;
         goto final;
     }

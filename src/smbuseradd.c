@@ -95,10 +95,17 @@ int main(int argc, char *argv[])
         goto final;
     }
 
+    // copy effective user and group id to real user and group id, otherwise
+    // smbpasswd will throw away permissions
+    if (raise_to_effective() != 0)
+    {
+        return -1;
+    }
+
     // add user and set smb password
     if (smbuseradd(username, smb_password) != 0)
     {
-        fprintf(stderr, "Failed to set password for user %s.", username);
+        fprintf(stderr, "Failed to set password for user %s.\n", username);
         retval = SMB_PASSWORD_ERROR;
         goto final;
     }

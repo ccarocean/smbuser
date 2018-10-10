@@ -31,4 +31,11 @@
 bool alnum_only(const char *string);
 
 
+/** Copy effective user and group id's to real id's.
+ *
+ * @return 0 on success, -1 on failure
+ */
+int raise_to_effective(void);
+
+
 #endif //SMBUSER_COMMON_H
