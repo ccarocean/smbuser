@@ -28,16 +28,22 @@
 #include "smb.h"
 
 
-void print_usage(FILE *stream)
-{
-    fputs("PRINT HELP\n", stream);
-}
-
-
 #define UNKNOWN_ERROR 1
 #define INVALID_INPUT 2
 #define AUTH_ERROR 3
 #define SMB_PASSWORD_ERROR 4
+
+
+void print_usage(FILE *stream)
+{
+    fputs("Usage: smbuseradd [options] [USERNAME]\n\n"
+          "Adds user with USERNAME to SMB database and sets their SMB password.  If the\n"
+          "user is already in the SMB database their password will be changed.  The user\n"
+          "must be a valid UNIX user on the system and smbuseradd will ask for the user's\n"
+          "UNIX password, even when run as root.\n\n"
+          "Options:\n"
+          "  -h, --help           print this message and exit\n\n", stream);
+}
 
 
 int main(int argc, char *argv[])
@@ -48,10 +54,16 @@ int main(int argc, char *argv[])
     char *unix_password = NULL;
     char *smb_password = NULL;
 
-    if (argc < 2)
+    if (argc != 2)
     {
         print_usage(stderr);
         return INVALID_INPUT;
+    }
+
+    if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
+    {
+        print_usage(stderr);
+        return 0;
     }
 
     if (!alnum_only(argv[1]))

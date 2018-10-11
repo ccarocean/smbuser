@@ -28,16 +28,20 @@
 #include "smb.h"
 
 
-void print_usage(FILE *stream)
-{
-    fputs("PRINT HELP\n", stream);
-}
-
-
 #define UNKNOWN_ERROR 1
 #define INVALID_INPUT 2
 #define AUTH_ERROR 3
 #define SMB_PASSWORD_ERROR 4
+
+
+void print_usage(FILE *stream)
+{
+    fputs("Usage: smbuserdel [options] [USERNAME]\n\n"
+          "Removes user with USERNAME from SMB database.  It will ask for the user's UNIX\n"
+          "password, even when run as root.\n\n"
+          "Options:\n"
+          "  -h, --help           print this message and exit\n\n", stream);
+}
 
 
 int main(int argc, char *argv[])
@@ -47,10 +51,16 @@ int main(int argc, char *argv[])
     char *username = NULL;
     char *unix_password = NULL;
 
-    if (argc < 2)
+    if (argc != 2)
     {
         print_usage(stderr);
         return INVALID_INPUT;
+    }
+
+    if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
+    {
+        print_usage(stderr);
+        return 0;
     }
 
     if (!alnum_only(argv[1]))
@@ -88,7 +98,7 @@ int main(int argc, char *argv[])
     }
 
     // cleanup
-    final:
+final:
     if (username != NULL)
     {
         memset(username, 0, strlen(username));
