@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <unistd.h>
+#include <sys/mman.h>
 
 #include "config.h"
 #include "common.h"
@@ -53,6 +54,20 @@ int main(int argc, char *argv[])
     char *username = NULL;
     char *unix_password = NULL;
     char *smb_password = NULL;
+
+    // make sure we are running as root
+    if (getuid() != 0 && geteuid() !=0)
+    {
+        fputs("Must be run as root.\n", stderr);
+        retval = UNKNOWN_ERROR;
+    }
+
+    // lock pages so they cannot be paged out to disk (to prevent password leak)
+    if (mlockall(MCL_FUTURE) != 0)
+    {
+        perror("mlockall: ");
+        return UNKNOWN_ERROR;
+    }
 
     if (argc != 2)
     {
