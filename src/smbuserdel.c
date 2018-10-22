@@ -101,12 +101,10 @@ int main(int argc, char *argv[])
 final:
     if (username != NULL)
     {
-        memset(username, 0, strlen(username));
         free(username);
     }
     if (unix_password != NULL)
     {
-        memset(unix_password, 0, strlen(unix_password));
         free(unix_password);
     }
     return retval;
