@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         retval = SMB_PASSWORD_ERROR;
         goto final;
     }
-    if (strlen(smb_password) < 8)
+    if (strlen(smb_password) < SMB_MIN_PASSWD_LENGTH)
     {
         fprintf(stderr, "SMB password must be at least %d characters.\n",
                 SMB_MIN_PASSWD_LENGTH);

@@ -44,9 +44,12 @@ int raise_to_effective(void)
     if (setuid(geteuid()) == -1)
     {
         perror("setuid");
+        return -1;
     }
     if (setgid(getegid()) == -1)
     {
-
+        perror("setgid");
+        return -1;
     }
+    return 0;
 }
