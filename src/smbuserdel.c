@@ -116,10 +116,12 @@ int main(int argc, char *argv[])
 final:
     if (username != NULL)
     {
+        explicit_bzero(username, sizeof(strlen(username)));
         free(username);
     }
     if (unix_password != NULL)
     {
+        explicit_bzero(unix_password, sizeof(strlen(unix_password)));
         free(unix_password);
     }
     return retval;
